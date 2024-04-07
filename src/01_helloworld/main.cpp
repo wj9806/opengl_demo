@@ -17,7 +17,7 @@ float get_f();
  * 创建opengl窗口
  * @return
  */
-int main()
+int main1()
 {
     glfwInit();
 
@@ -49,7 +49,7 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     //渲染循环
-    //glfwWindowShouldClose 判断glfw是否被要求推出，是返回true
+    //glfwWindowShouldClose 判断glfw是否被要求退出，是返回true
     while(!glfwWindowShouldClose(window))
     {
         //输入
