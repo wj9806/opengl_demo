@@ -17,7 +17,7 @@ float get_f();
  * ´´½¨opengl´°¿Ú
  * @return
  */
-int main1()
+int main_01()
 {
     glfwInit();
 

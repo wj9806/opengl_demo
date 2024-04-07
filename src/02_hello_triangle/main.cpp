@@ -19,7 +19,7 @@ void
 createShader(unsigned int &vertexShader, unsigned int &fragmentShader, int &success);
 
 //顶点着色器源码
-const char * vertexShaderSource = "#version 330 core\n"
+static const char * vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
                                  "void main()\n"
                                  "{\n"
@@ -37,7 +37,7 @@ const char * fragmentShaderSource = "#version 330 core\n"
 /**
  * 顶点数组   ---->  顶点着色器   ----> 图元装配  ---->  几何着色器   ---->  光栅化   ---->   裁剪   ---->  片段着色器   ----> 测试和混合
  */
-int main()
+int main_02()
 {
     glfwInit();
 
