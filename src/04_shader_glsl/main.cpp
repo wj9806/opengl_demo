@@ -13,28 +13,34 @@ void processInput(GLFWwindow *window);
 //顶点着色器源码
 static const char * vertexShaderSource = "#version 330 core\n"
                                   "layout (location = 0) in vec3 aPos;\n"
+                                  "out vec4 vColor;\n"
                                   "void main()\n"
                                   "{\n"
                                   "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f);\n"
+                                  "   vColor = vec4(0.1f, 0.1f, 0.1f, 0.0f);\n"
                                   "}\0";
 
 //片段着色器源码
-const char * fragmentShaderSource1 = "#version 330 core\n"
+static const char * fragmentShaderSource1 = "#version 330 core\n"
                                     "out vec4 FragColor;\n"
+                                    //vColor 和 vertexShaderSource 中的输出变量vColor链接
+                                    "in vec4 vColor;\n"
+                                    "uniform vec4 ourColor1;\n"
                                     "void main()\n"
                                     "{\n"
-                                    "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+                                    "    FragColor = vec4(0.0f, 0.2f, 0.2f, 1.0f) + vColor + ourColor1;\n"
                                     "}\0";
 
 //片段着色器源码
-const char * fragmentShaderSource2 = "#version 330 core\n"
+static const char * fragmentShaderSource2 = "#version 330 core\n"
                                      "out vec4 FragColor;\n"
+                                     "uniform vec4 ourColor2;\n"
                                      "void main()\n"
                                      "{\n"
-                                     "    FragColor = vec4(0.5f, 1.0f, 0.2f, 1.0f);\n"
+                                     "    FragColor = ourColor2;\n"
                                      "}\0";
 
-int main03()
+int main04_1()
 {
     glfwInit();
 
@@ -182,15 +188,22 @@ int main03()
         //渲染指令
         glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+        float timeValue = glfwGetTime();
 
         glUseProgram(shaderProgram1);
+        int vertexColorLocation1 = glGetUniformLocation(shaderProgram1, "ourColor1");
+        float redValue = (sin(timeValue) / 2.0f) + 0.5f;
+        glUniform4f(vertexColorLocation1, redValue, 0.0f, 0.0f, 1.0f);
         glBindVertexArray(VAOS[0]);
-        glDrawArrays(GL_LINE_LOOP, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
 
         glUseProgram(shaderProgram2);
+        int vertexColorLocation = glGetUniformLocation(shaderProgram2, "ourColor2");
+        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+        glUniform4f(vertexColorLocation, 0.1f, greenValue, 0.0f, 1.0f);
         glBindVertexArray(VAOS[1]);
-        glDrawArrays(GL_LINE_LOOP, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
 
         //glfwPollEvents函数检查有没有触发什么事件（比如键盘输入、鼠标移动等）

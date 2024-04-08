@@ -70,11 +70,6 @@ int main_01()
     return 0;
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, 800, 600);
-}
-
 void processInput(GLFWwindow *window)
 {
     //ÅÐ¶ÏÊÇ·ñ°´ÏÂesc
