@@ -12,7 +12,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 Window::Window(int width, int height)
 {
-    window = glfwCreateWindow(width, height, "opengl-demo", nullptr, nullptr);
+    this->window = glfwCreateWindow(width, height, "opengl-demo", nullptr, nullptr);
     if (window == nullptr)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -29,12 +29,27 @@ Window::Window(int width, int height)
     glViewport(0, 0, width, height);
 
     //注册回调函数（窗口变化监听）
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    fwSetFramebufferSizeCallback(framebuffer_size_callback);
+}
+
+Window::~Window()
+{
+    glfwTerminate();
 }
 
 void Window::fwSwapBuffers()
 {
     glfwSwapBuffers(window);
+}
+
+void Window::fwPollEvents()
+{
+    glfwPollEvents();
+}
+
+GLFWframebuffersizefun Window::fwSetFramebufferSizeCallback(GLFWframebuffersizefun callback)
+{
+    return glfwSetFramebufferSizeCallback(window, callback);
 }
 
 GLFWwindow* Window::getWindow()

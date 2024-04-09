@@ -14,7 +14,13 @@ private:
 public:
     Window(int width, int height);
 
+    ~Window();
+
     void fwSwapBuffers();
+
+    void fwPollEvents();
+
+    GLFWframebuffersizefun fwSetFramebufferSizeCallback(GLFWframebuffersizefun callback);
 
     GLFWwindow* getWindow();
 
