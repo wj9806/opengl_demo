@@ -7,7 +7,7 @@
 #include "window.h"
 #include "tools.h"
 
-int main()
+int main05()
 {
     envInit();
     Window window(800, 600);
