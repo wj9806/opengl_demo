@@ -16,7 +16,7 @@ int main()
     envInit();
     Window window(800, 600);
     std::string exePath = __FILE__;
-    Shader shader(getFilePath(exePath, "vertex.vs"), getFilePath(exePath, "fragment.fs"));
+    Shader shader(getFilePath(exePath, "vertex.glsl"), getFilePath(exePath, "fragment.glsl"));
 
     float vertices[] = {
                 //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
@@ -83,10 +83,10 @@ int main()
     glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture2);
     // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
     // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     // load image, create texture and generate mipmaps
@@ -102,7 +102,7 @@ int main()
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
-    //shader.use();
+    shader.use();
     glUniform1i(glGetUniformLocation(shader.ID, "texture1"), 0); // 手动设置
     shader.setInt("texture2", 1); // 或者使用着色器类设置
 

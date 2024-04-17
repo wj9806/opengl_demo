@@ -12,7 +12,7 @@ int main05()
     envInit();
     Window window(800, 600);
     std::string exePath = __FILE__;
-    Shader shader(getFilePath(exePath, "vertex.vs"), getFilePath(exePath, "fragment.fs"));
+    Shader shader(getFilePath(exePath, "vertex.glsl"), getFilePath(exePath, "fragment.glsl"));
 
     float vertices[] = {
             // Î»ÖÃ              // ÑÕÉ«
