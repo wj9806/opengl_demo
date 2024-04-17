@@ -106,10 +106,16 @@ int main()
     glUniform1i(glGetUniformLocation(shader.ID, "texture1"), 0); // 手动设置
     shader.setInt("texture2", 1); // 或者使用着色器类设置
 
+    float factor = 0.0;
+
     while(!window.fwWindowShouldClose())
     {
         //输入
         window.processInput();
+
+        factor = glfwGetTime();
+
+        shader.setFloat("factor", factor);
 
         //渲染指令
         glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
