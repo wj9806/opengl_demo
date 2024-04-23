@@ -2,8 +2,11 @@
 // Created by wj on 2024/4/8.
 //
 
+
+#include "windows.h"
 #include "window.h"
 #include <iostream>
+#include <string>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -37,9 +40,24 @@ Window::~Window()
     glfwTerminate();
 }
 
+static std::string calculateFrameRate() {
+    static float framesPerSecond = 0.0f;       // This will store our fps
+    static float lastTime = 0.0f;       // This will hold the time from the last frame
+    float currentTime = GetTickCount() * 0.001f;
+    ++framesPerSecond;
+    static int temp = 0;
+    if (currentTime - lastTime > 1.0f) {
+        lastTime = currentTime;
+        temp = int(framesPerSecond);
+        framesPerSecond = 0;
+    }
+    return "opengl-demo fps: " + std::to_string(temp);
+}
+
 void Window::fwSwapBuffers()
 {
     glfwSwapBuffers(window);
+    setWindowTitle(calculateFrameRate().data());
 }
 
 void Window::fwPollEvents()
@@ -68,4 +86,9 @@ void Window::processInput()
 int Window::fwWindowShouldClose()
 {
     return glfwWindowShouldClose(window);
+}
+
+void Window::setWindowTitle(char * title)
+{
+    glfwSetWindowTitle(window, title);
 }

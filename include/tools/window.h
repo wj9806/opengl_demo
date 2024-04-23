@@ -27,6 +27,8 @@ public:
     void processInput();
 
     int fwWindowShouldClose();
+
+    void setWindowTitle(char * title);
 };
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
