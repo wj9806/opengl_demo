@@ -132,8 +132,10 @@ int main()
         glBindTexture(GL_TEXTURE_2D, texture2);
 
         glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-        transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
-        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        //transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
+        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f)); // Switched the order
+        transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f)); // Switched the order
+        transform = glm::scale(transform, glm::vec3(0.5, 0.5, 0.5));
 
         shader.use();
 
@@ -142,6 +144,14 @@ int main()
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        glm::mat4 transform2 = glm::mat4(1.0f);
+        transform2 = glm::translate(transform2, glm::vec3(0.5f, 0.5f, 0.0f)); // Switched the order
+        transform2 = glm::scale(transform2, glm::vec3(sin(factor * 0.5), sin(factor * 0.5), 0.5));
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform2));
+        transform2 = glm::mat4 (1.0f);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_POINTS, 6, GL_UNSIGNED_INT, 0);
 
         window.fwPollEvents();
         window.fwSwapBuffers();
