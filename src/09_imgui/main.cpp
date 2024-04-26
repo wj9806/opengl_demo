@@ -14,14 +14,27 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "imgui.h"
+#include "imgui_impl_opengl3.h"
+#include "imgui_impl_glfw.h"
 
-int main08()
+int main()
 {
     envInit();
     Window window(800, 600);
     std::string exePath = __FILE__;
     Shader shader(getFilePath(exePath, "vertex.glsl"), getFilePath(exePath, "fragment.glsl"));
     glEnable(GL_DEPTH_TEST);
+
+    //创建imgui上下文
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    (void)io;
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(window.getWindow(), true);
+    const char* glsl_version = "#version 330";
+    ImGui_ImplOpenGL3_Init(glsl_version);
 
     float vertices[] = {
             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -159,16 +172,27 @@ int main08()
             glm::vec3( 1.5f,  0.2f, -1.5f),
             glm::vec3(-1.3f,  1.0f, -1.5f)
     };
-
+    ImVec4 clear_color = ImVec4(0.1, 0.1, 0.1, 1.0);
     while(!window.fwWindowShouldClose())
     {
         //输入
         window.processInput();
 
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        static float f = 0.0f;
+        static int counter = 0;
+        ImGui::Begin("imgui-opengl");
+        ImGui::SliderFloat("speed", &f, 0.0f, 1.0f);
+        ImGui::ColorEdit3("color", (float *)&clear_color);
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+        ImGui::End();
+
         factor = glfwGetTime();
 
         //渲染指令
-        glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glClear(GL_COLOR_BUFFER_BIT);
 
@@ -195,11 +219,14 @@ int main08()
             // calculate the model matrix for each object and pass it to shader before drawing
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i - 1]);
-            model = glm::rotate(model, glm::radians((float)(20.0f * glfwGetTime() * i)), glm::vec3(1.0f, 0.3f, 0.5f));
+            model = glm::rotate(model, glm::radians((float)(20.0f * glfwGetTime() * i * f)), glm::vec3(1.0f, 0.3f, 0.5f));
             shader.setMat4("model", model);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         window.fwSwapBuffers();
         window.fwPollEvents();
